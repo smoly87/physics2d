@@ -70,14 +70,14 @@ public class Java2DRenderer extends JFrame {
                 }*/
                 long dt = System.nanoTime() - t;
                 t = System.nanoTime();
-                solver.step((double)(0.1));
+                //solver.step((double)(0.01));
                 //System.out.println(((double)dt/10e9));
                 g.setColor(Color.red);
                 for(Body body : scene.getBodiesList()) {
                     Polygon polygon = createPolygonFromBody(body);
                    g.drawPolygon(polygon);
                }
-                this.repaint();
+              //  this.repaint();
 
             }
         };

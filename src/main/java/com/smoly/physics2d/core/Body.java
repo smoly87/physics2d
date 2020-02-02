@@ -9,6 +9,7 @@ import static java.lang.Math.sin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Body {
@@ -31,6 +32,7 @@ public class Body {
     protected double m = 1; // mass
     protected Vector3D v; // velocity x,y,w (linear and angular)
     protected List<Force> forces;
+    protected List<Edge> edgesList;
 
     public RealMatrix getInverseM() {
         return new Array2DRowRealMatrix(new double[][] {
@@ -60,8 +62,26 @@ public class Body {
         return vertexes;
     }
 
+    public List<Vector2D> getVertexesAbs() {
+        return vertexes.stream().map(this::getAbsCoord).collect(Collectors.toList());
+    }
+
     public void setVertexes(List<Vector2D> vertexes) {
         this.vertexes = vertexes;
+        int N = vertexes.size() - 1;
+        for(int i = 0; i < N; i++) {
+            edgesList.add(new Edge(vertexes.get(i), vertexes.get(i+1)));
+        }
+    }
+
+    public List<Edge> getEdges() {
+        return edgesList;
+    }
+
+    public List<Edge> getEdgesAbs() {
+        return edgesList.stream()
+                .map(edge -> new Edge(getAbsCoord(edge.getV1()), getAbsCoord(edge.getV2())))
+                .collect(Collectors.toList());
     }
 
     public double getI() {

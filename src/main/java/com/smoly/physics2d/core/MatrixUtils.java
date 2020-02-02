@@ -45,6 +45,11 @@ public class MatrixUtils {
         return new Vector3D(concat(v.toArray(), new double[]{0}));
     }
 
+    public static Vector2D createFrom3D(Vector3D v) {
+        return new Vector2D(v.getX(), v.getY());
+    }
+
+
     public static Vector3D createFrom2D(Vector2D v, double zValue) {
         return new Vector3D(concat(v.toArray(), new double[]{zValue}));
     }

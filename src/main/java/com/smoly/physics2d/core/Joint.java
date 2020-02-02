@@ -18,7 +18,7 @@ public class Joint extends BodyInteraction {
 
 
     @Override
-    public RealMatrix getCurrentJ() {
+    public RealMatrix getJ() {
         Vector2D pA = getBodyA().getAbsCoord(getBodyA().getVertexes().get(bodyAVertInd));
         Vector2D pB = getBodyB().getAbsCoord(getBodyB().getVertexes().get(bodyBVertInd));
         Vector2D cA = getBodyA().getCenter();
