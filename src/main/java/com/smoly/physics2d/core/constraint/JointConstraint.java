@@ -1,21 +1,23 @@
-package com.smoly.physics2d.core;
+package com.smoly.physics2d.core.constraint;
 
+import com.smoly.physics2d.core.Body;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import static com.smoly.physics2d.core.MatrixUtils.crossProduct2d;
-public class Joint extends BodyInteraction {
+public class JointConstraint extends Constraint {
 
 
     protected int bodyAVertInd;
     protected int bodyBVertInd;
 
-    public Joint(Body bodyA, Body bodyB, int bodyAVertInd, int bodyBVertInd) {
+    public JointConstraint(Body bodyA, Body bodyB, int bodyAVertInd, int bodyBVertInd) {
         super(bodyA, bodyB);
         this.bodyAVertInd = bodyAVertInd;
         this.bodyBVertInd = bodyBVertInd;
-    }
+        this.setConstraintType(ConstraintType.EQUALITY);
 
+    }
 
     @Override
     public RealMatrix getJ() {

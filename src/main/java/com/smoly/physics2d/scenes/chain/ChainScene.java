@@ -2,7 +2,7 @@ package com.smoly.physics2d.scenes.chain;
 
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.Force;
-import com.smoly.physics2d.core.Joint;
+import com.smoly.physics2d.core.constraint.JointConstraint;
 import com.smoly.physics2d.core.Scene;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -25,7 +25,7 @@ public class ChainScene extends Scene {
         for(int i = 0; i < 1; i++) {
             Body piece = createChainPiece(i,l, Math.PI / 4);
             this.addBody(piece);
-            this.addJoint(new Joint(prevBody, piece, 1,0 ));
+            this.addJoint(new JointConstraint(prevBody, piece, 1,0 ));
             prevBody = piece;
         }
     }

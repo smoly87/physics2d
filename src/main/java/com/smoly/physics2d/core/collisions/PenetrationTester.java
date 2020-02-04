@@ -1,4 +1,4 @@
-package com.smoly.physics2d.collisions;
+package com.smoly.physics2d.core.collisions;
 
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.Edge;

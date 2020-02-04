@@ -1,6 +1,7 @@
 package com.smoly.physics2d.core;
 
-import com.smoly.physics2d.renderer.Java2DRenderer;
+import com.smoly.physics2d.core.constraint.Constraint;
+import com.smoly.physics2d.core.constraint.JointConstraint;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,12 +11,12 @@ public class Scene {
         return bodiesList;
     }
 
-    public List<BodyInteraction> getBodyInteractionsList() {
+    public List<Constraint> getBodyInteractionsList() {
         return bodyInteractionsList;
     }
 
     private final  List<Body> bodiesList;
-    private final List<BodyInteraction> bodyInteractionsList;
+    private final List<Constraint> bodyInteractionsList;
     public Scene() {
         bodiesList = new LinkedList<>();
         bodyInteractionsList = new LinkedList<>();
@@ -25,8 +26,8 @@ public class Scene {
         this.bodiesList.add(body);
     }
 
-    public void addJoint(Joint joint) {
-        this.bodyInteractionsList.add(joint);
+    public void addJoint(JointConstraint jointConstraint) {
+        this.bodyInteractionsList.add(jointConstraint);
     }
 
     public void start() {

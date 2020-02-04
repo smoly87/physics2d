@@ -1,4 +1,4 @@
-package com.smoly.physics2d.collisions;
+package com.smoly.physics2d.core.collisions;
 
 import com.smoly.physics2d.core.Body;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;

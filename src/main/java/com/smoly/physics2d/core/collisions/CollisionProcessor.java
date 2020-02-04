@@ -1,8 +1,10 @@
-package com.smoly.physics2d.collisions;
+package com.smoly.physics2d.core.collisions;
 
-import com.smoly.physics2d.DynamicConstraintsProcessor;
+import com.google.inject.Inject;
+import com.smoly.physics2d.core.DynamicConstraintsProcessor;
+import com.smoly.physics2d.core.constraint.CollisionConstraint;
 import com.smoly.physics2d.core.Body;
-import com.smoly.physics2d.core.BodyInteraction;
+import com.smoly.physics2d.core.constraint.Constraint;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -11,17 +13,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CollisionProcessor extends DynamicConstraintsProcessor {
-    protected List<Body> bodies;
     protected Map<Body, BoundRect> boundRectMap;
-    protected PenetrationTester penetrationTester;
+    protected final PenetrationTester penetrationTester;
 
-    public CollisionProcessor(List<Body> bodiesList) {
-        super(bodiesList);
-        penetrationTester = new PenetrationTester();
+    @Inject
+    public CollisionProcessor(PenetrationTester penetrationTester) {
+        this.penetrationTester = penetrationTester;
     }
 
-    protected List<CollisionCandidate> getCollisionCandidates() {
-       List<BoundRect> boundRectsList =  bodies.stream()
+    protected List<CollisionCandidate> getCollisionCandidates(List<Body> bodiesList) {
+       List<BoundRect> boundRectsList =  bodiesList.stream()
                .map(body -> createBoundRect(body))
                .collect(Collectors.toList());
         List<CollisionCandidate> collisionCandidateList = new LinkedList<>();
@@ -43,16 +44,15 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
         double Xmax = body.getVertexesAbs().stream().map(v -> v.getY()).max(Double::compareTo).get();
         double Ymax = body.getVertexesAbs().stream().map(v -> v.getY()).max(Double::compareTo).get();
         return new BoundRect(body, Xmin, Ymin, Xmax - Xmin, Ymax - Ymin);
-
     }
 
 
     @Override
-    public List<BodyInteraction> generateDynamicInteraction() {
-        return getCollisionCandidates().stream()
+    public List<Constraint> generateDynamicConstraints(List<Body> bodiesList) {
+        return getCollisionCandidates(bodiesList).stream()
                 .map(collisionCandidate -> penetrationTester.getPenetrationsList(collisionCandidate.bodyA, collisionCandidate.bodyB))
                 .flatMap(Collection::stream)
-                .map(penetrationInfo -> new Collision(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
+                .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
                 .collect(Collectors.toList());
     }
 }

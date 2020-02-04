@@ -3,10 +3,9 @@ package com.smoly.physics2d.renderer;
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.MatrixUtils;
 import com.smoly.physics2d.core.Scene;
-import com.smoly.physics2d.core.Solver;
+import com.smoly.physics2d.core.solver.Solver;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.awt.*;
