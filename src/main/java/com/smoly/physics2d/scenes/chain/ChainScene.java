@@ -1,9 +1,12 @@
 package com.smoly.physics2d.scenes.chain;
 
+import com.google.inject.Inject;
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.Force;
 import com.smoly.physics2d.core.constraint.JointConstraint;
-import com.smoly.physics2d.core.Scene;
+import com.smoly.physics2d.core.scene.Scene;
+import com.smoly.physics2d.renderer.SceneRender;
+import com.smoly.physics2d.core.solver.Solver;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
@@ -14,6 +17,11 @@ import static java.lang.Math.sin;
 import static java.lang.Math.cos;
 
 public class ChainScene extends Scene {
+    @Inject
+    public ChainScene(SceneRender renderer, Solver solver, SceneDebuger sceneDebuger) {
+        super(renderer, solver, sceneDebuger);
+    }
+
     @Override
     protected void init() {
         super.init();

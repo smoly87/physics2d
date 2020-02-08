@@ -26,4 +26,10 @@ public class Edge {
     public Vector2D getV2() {
         return v2;
     }
+
+    public Vector2D getMiddle() {
+        return new Vector2D(
+                (getV1().getX() + getV2().getX()) / 2,
+                (getV1().getY() + getV2().getY()) / 2);
+    }
 }

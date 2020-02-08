@@ -1,5 +1,6 @@
 package com.smoly.physics2d.core.solver;
 
+import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.smoly.physics2d.core.Body;
@@ -20,8 +21,8 @@ public class Solver {
     protected final Set<DynamicConstraintsProcessor> processors;
     protected final SolverConfig solverConfig;
 
-    @AssistedInject
-    public Solver(Set<DynamicConstraintsProcessor> processors, @Assisted SolverConfig solverConfig) {
+    @Inject
+    public Solver(Set<DynamicConstraintsProcessor> processors, SolverConfig solverConfig) {
         this.processors = processors;
         this.solverConfig = solverConfig;
     }
@@ -74,7 +75,7 @@ public class Solver {
             double iA = A.getI();
             double iB = B.getI();
             RealMatrix J = constraint.getJ();
-            double bias = solverConfig.getBeta() /  dt * constraint.getBias();
+            double bias = solverConfig.beta() /  dt * constraint.getBias();
             RealMatrix MInvAB = new Array2DRowRealMatrix(MatrixUtils.diagMatrix(new double[]{mB, mB, iB, mA, mA, iA })); // United velocity vector of both bodies.
 
             MInvABMap.put(constraint, MInvAB);
@@ -82,7 +83,7 @@ public class Solver {
             biasMap.put(constraint, bias);
             accumulatedLambdaMap.put(constraint, 0d);
         }
-        for (int i = 0; i < solverConfig.getCorrectionStepsCount(); i++) {
+        for (int i = 0; i < solverConfig.correctionStepsCount(); i++) {
             for (Constraint constraint : bodyInteractionsList) {
                 double lambdaAccumulated = accumulatedLambdaMap.get(constraint);
                 Body A = constraint.getBodyA();

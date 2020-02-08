@@ -11,4 +11,6 @@ public class SolverModule extends AbstractModule {
     protected void configure() {
         Multibinder.newSetBinder(binder(), DynamicConstraintsProcessor.class).addBinding().to(CollisionProcessor.class);
     }
+
+
 }

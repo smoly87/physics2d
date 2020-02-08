@@ -1,9 +1,9 @@
 package com.smoly.physics2d.renderer;
 
+import com.google.inject.Inject;
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.MatrixUtils;
-import com.smoly.physics2d.core.Scene;
-import com.smoly.physics2d.core.solver.Solver;
+import com.smoly.physics2d.core.scene.ScreenConfig;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -13,31 +13,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import static com.smoly.physics2d.core.MatrixUtils.*;
-public class Java2DRenderer extends JFrame {
-    double Xmin = -5;
-    double Xmax = 5;
-    double Ymin = -5;
-    double Ymax = 5;
-    int ScreenWidth = 1000;
-    int ScreenHeight = 1000;
+public class Java2DRenderer extends JFrame implements SceneRender {
+
     double xToViewPortCoof;
     double yToViewPortCoof;
     RealMatrix viewPortMatrix;
     protected long t;
     protected long startT;
+    protected Canvas canvas;
+    protected final ScreenConfig config;
     protected Integer[] worldCoordsToViewPort(Vector2D vec) {
-        //System.out.println(vec);
-        //return new Integer[] {(int) ((vec.getX() - Xmin) * xToViewPortCoof), (int) ((-vec.getY() - Ymin) * yToViewPortCoof)};
       Vector3D viewPortCoord = new Vector3D(viewPortMatrix.multiply(vecToRealMatrix(createFrom2D(vec, 1d))).getColumn(0));
       return new Integer[]{(int)viewPortCoord.getX(), (int)viewPortCoord.getY()};
     }
 
     protected RealMatrix calculateViewPortMatrix() {
-        xToViewPortCoof = (ScreenWidth/(Xmax - Xmin));
-        yToViewPortCoof = (ScreenHeight/(Ymax - Ymin));
+        xToViewPortCoof = (config.screenWidth()/(config.xMax() - config.xMin()));
+        yToViewPortCoof = (config.screenHeight()/(config.yMax() - config.yMin()));
         RealMatrix A = MatrixUtils.diagRealMatrix(new double[]{xToViewPortCoof, -yToViewPortCoof, 0d });
-        A.setEntry(0, 2, - Xmin * xToViewPortCoof);
-        A.setEntry(1, 2, - Ymin * yToViewPortCoof);
+        A.setEntry(0, 2, - config.xMin() * xToViewPortCoof);
+        A.setEntry(1, 2, - config.yMin() * yToViewPortCoof);
         return A;
     }
 
@@ -54,36 +49,34 @@ public class Java2DRenderer extends JFrame {
                 vertList.size());
     }
 
-    // constuctor
-    public Java2DRenderer(final Scene scene) {
+    public void renderBodies(List<Body> bodiesList, Color color) {
+        for(Body body : bodiesList) {
+            Polygon polygon = createPolygonFromBody(body);
+            Graphics g = canvas.getGraphics();
+            g.setColor(color);
+            g.drawPolygon(polygon);
+            //g.drawOval();
+        }
+    }
+
+    public void setColor(Color color) {
+        canvas.getGraphics().setColor(Color.red);
+    }
+
+    @Override
+    public void clear() {
+        canvas.getGraphics().clearRect(0, 0, config.screenWidth(), config.screenHeight());
+    }
+
+    @Inject
+    public Java2DRenderer(ScreenConfig config, Canvas canvas) {
         super("canvas");
+        this.config = config;
         viewPortMatrix = calculateViewPortMatrix();
-        Solver solver = new Solver(scene.getBodiesList(), scene.getBodyInteractionsList());
-        t = System.nanoTime();
-        startT = t;
-        scene.start();
-        Canvas c = new Canvas() {
-            public void paint(Graphics g) {
-             /*   if ((t - startT) /1000 > 5){
-                    return;
-                }*/
-                long dt = System.nanoTime() - t;
-                t = System.nanoTime();
-                //solver.step((double)(0.01));
-                //System.out.println(((double)dt/10e9));
-                g.setColor(Color.red);
-                for(Body body : scene.getBodiesList()) {
-                    Polygon polygon = createPolygonFromBody(body);
-                   g.drawPolygon(polygon);
-               }
-              //  this.repaint();
-
-            }
-        };
-
-        c.setBackground(Color.black);
-        add(c);
-        setSize(ScreenWidth, ScreenHeight);
+        canvas.setBackground(Color.black);
+        add(canvas);
+        setSize(config.screenWidth(), config.screenHeight());
+        this.canvas = canvas;
         show();
     }
 }

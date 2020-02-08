@@ -40,6 +40,7 @@ public class JointConstraint extends Constraint {
 
     @Override
     public double getBias() {
+        // ????
         Vector2D pA = getBodyA().getAbsCoord(getBodyA().getVertexes().get(bodyAVertInd));
         Vector2D pB = getBodyB().getAbsCoord(getBodyB().getVertexes().get(bodyBVertInd));
         Vector2D c = pA.subtract(pB);

@@ -5,20 +5,21 @@ import com.smoly.physics2d.core.DynamicConstraintsProcessor;
 import com.smoly.physics2d.core.constraint.CollisionConstraint;
 import com.smoly.physics2d.core.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
+import com.smoly.physics2d.scenes.chain.SceneDebuger;
+import com.smoly.physics2d.scenes.chain.VectorVis;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CollisionProcessor extends DynamicConstraintsProcessor {
     protected Map<Body, BoundRect> boundRectMap;
     protected final PenetrationTester penetrationTester;
+    protected final SceneDebuger sceneDebuger;
 
     @Inject
-    public CollisionProcessor(PenetrationTester penetrationTester) {
+    public CollisionProcessor(PenetrationTester penetrationTester, SceneDebuger sceneDebuger) {
         this.penetrationTester = penetrationTester;
+        this.sceneDebuger = sceneDebuger;
     }
 
     protected List<CollisionCandidate> getCollisionCandidates(List<Body> bodiesList) {
@@ -27,9 +28,10 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
                .collect(Collectors.toList());
         List<CollisionCandidate> collisionCandidateList = new LinkedList<>();
 
-        for (BoundRect b1: boundRectsList) {
-            for (BoundRect b2:boundRectsList) {
-                if(b1.equals(b2)) continue;
+        for (int i = 0; i < boundRectsList.size(); i ++) {
+            for (int j = i + 1 ; j < boundRectsList.size(); j++) {
+                BoundRect b1 = boundRectsList.get(i);
+                BoundRect b2 = boundRectsList.get(j);
                 if (b1.isIntersectsWith(b2)) {
                     collisionCandidateList.add(new CollisionCandidate(b1.getBody(), b2.getBody()));
                 }
@@ -49,10 +51,20 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
 
     @Override
     public List<Constraint> generateDynamicConstraints(List<Body> bodiesList) {
-        return getCollisionCandidates(bodiesList).stream()
+        List<Constraint> res = getCollisionCandidates(bodiesList).stream()
                 .map(collisionCandidate -> penetrationTester.getPenetrationsList(collisionCandidate.bodyA, collisionCandidate.bodyB))
                 .flatMap(Collection::stream)
                 .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
                 .collect(Collectors.toList());
+        debugConstraints(res);
+        return res;
+    }
+
+    private void debugConstraints(List<Constraint> constraints) {
+        for(Constraint constraint : constraints) {
+            CollisionConstraint collisionConstraint = (CollisionConstraint)constraint;
+            sceneDebuger.addBody(new VectorVis(collisionConstraint.getpA(), collisionConstraint.getpB()));
+        }
+
     }
 }

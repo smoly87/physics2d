@@ -18,6 +18,7 @@ public class BoundRect {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.body = body;
     }
 
     public boolean isIntersectsWith(BoundRect rect2) {
