@@ -1,4 +1,4 @@
-package com.smoly.physics2d.core;
+package com.smoly.physics2d.core.geometry;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 

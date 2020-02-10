@@ -1,11 +1,11 @@
 package com.smoly.physics2d.core.constraint;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
-import static com.smoly.physics2d.core.MatrixUtils.crossProduct2d;
+import static com.smoly.physics2d.core.utils.MatrixUtils.crossProduct2d;
 
 public class CollisionConstraint extends Constraint {
     private final Vector2D pA;
@@ -38,7 +38,7 @@ public class CollisionConstraint extends Constraint {
                 crossProduct2d(pA.subtract(cA),  n),
                 -n.getX(),
                 -n.getY(),
-                crossProduct2d(cB.subtract(pB),  n),
+                -crossProduct2d(pB.subtract(cB),  n),
         };
         return new Array2DRowRealMatrix(J).transpose();
     }

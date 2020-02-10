@@ -1,5 +1,6 @@
-package com.smoly.physics2d.core;
+package com.smoly.physics2d.core.geometry;
 
+import com.smoly.physics2d.core.utils.MatrixUtils;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 

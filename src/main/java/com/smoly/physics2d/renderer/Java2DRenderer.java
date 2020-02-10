@@ -1,8 +1,9 @@
 package com.smoly.physics2d.renderer;
 
 import com.google.inject.Inject;
-import com.smoly.physics2d.core.Body;
-import com.smoly.physics2d.core.MatrixUtils;
+import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
+import com.smoly.physics2d.core.utils.MatrixUtils;
 import com.smoly.physics2d.core.scene.ScreenConfig;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.*;
-import static com.smoly.physics2d.core.MatrixUtils.*;
+import static com.smoly.physics2d.core.utils.MatrixUtils.*;
 public class Java2DRenderer extends JFrame implements SceneRender {
 
     double xToViewPortCoof;
@@ -57,6 +58,20 @@ public class Java2DRenderer extends JFrame implements SceneRender {
             g.drawPolygon(polygon);
             //g.drawOval();
         }
+    }
+
+    public void drawLabels(List<CanvasPointWithLabel> pointsList) {
+        int d = 6;
+        Graphics g = canvas.getGraphics();
+        for(CanvasPointWithLabel canvasPointWithLabel:pointsList) {
+            Integer[] p = worldCoordsToViewPort(canvasPointWithLabel.getPosition());
+            g.setColor(canvasPointWithLabel.getColor());
+            g.fillOval(
+                    (int)(p[0] - d/2),
+                    (int)(p[1] -d/2)
+                    ,d,d );
+        }
+
     }
 
     public void setColor(Color color) {

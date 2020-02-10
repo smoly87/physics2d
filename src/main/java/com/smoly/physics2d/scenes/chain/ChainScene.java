@@ -1,10 +1,11 @@
 package com.smoly.physics2d.scenes.chain;
 
 import com.google.inject.Inject;
-import com.smoly.physics2d.core.Body;
-import com.smoly.physics2d.core.Force;
+import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.geometry.Force;
 import com.smoly.physics2d.core.constraint.JointConstraint;
 import com.smoly.physics2d.core.scene.Scene;
+import com.smoly.physics2d.core.utils.SceneDebuger;
 import com.smoly.physics2d.renderer.SceneRender;
 import com.smoly.physics2d.core.solver.Solver;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;

@@ -1,4 +1,4 @@
-package com.smoly.physics2d.core;
+package com.smoly.physics2d.core.geometry;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -91,10 +91,15 @@ public class Body {
     public void setVertexes(List<Vector2D> vertexes) {
         this.vertexes = vertexes;
         int N = vertexes.size();
-        for(int i = 0; i < N - 1; i++) {
-            edgesList.add(new Edge(vertexes.get(i), vertexes.get(i+1)));
+        if (N != 2) {
+            for(int i = 0; i < N - 1; i++) {
+                edgesList.add(new Edge(vertexes.get(i), vertexes.get(i+1)));
+            }
+            edgesList.add(new Edge(vertexes.get(N - 1), vertexes.get(0)));
+        } else {
+            edgesList.add(new Edge(vertexes.get(0), vertexes.get(1)));
         }
-        edgesList.add(new Edge(vertexes.get(N - 1), vertexes.get(0)));
+
 
     }
 

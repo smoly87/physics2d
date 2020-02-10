@@ -1,11 +1,11 @@
 package com.smoly.physics2d.core.scene;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
 import com.smoly.physics2d.core.constraint.JointConstraint;
 import com.smoly.physics2d.core.solver.Solver;
 import com.smoly.physics2d.renderer.SceneRender;
-import com.smoly.physics2d.scenes.chain.SceneDebuger;
+import com.smoly.physics2d.core.utils.SceneDebuger;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -50,10 +50,14 @@ public class Scene {
             renderer.clear();
             renderer.renderBodies(bodiesList, Color.gray);
             renderer.renderBodies(sceneDebuger.getBodiesList(), Color.red);
+            renderer.drawLabels(sceneDebuger.getPointsList());
             sceneDebuger.clearBodyList();
             t += dt;
+            break;
         }
     }
+
+
 
     protected void step() {
 

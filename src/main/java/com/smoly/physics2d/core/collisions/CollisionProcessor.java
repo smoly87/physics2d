@@ -1,14 +1,17 @@
 package com.smoly.physics2d.core.collisions;
 
 import com.google.inject.Inject;
-import com.smoly.physics2d.core.DynamicConstraintsProcessor;
+import com.smoly.physics2d.core.solver.DynamicConstraintsProcessor;
 import com.smoly.physics2d.core.constraint.CollisionConstraint;
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
-import com.smoly.physics2d.scenes.chain.SceneDebuger;
-import com.smoly.physics2d.scenes.chain.VectorVis;
+import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
+import com.smoly.physics2d.core.utils.SceneDebuger;
+import com.smoly.physics2d.core.geometry.bodies.types.VectorVis;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CollisionProcessor extends DynamicConstraintsProcessor {
@@ -63,7 +66,8 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
     private void debugConstraints(List<Constraint> constraints) {
         for(Constraint constraint : constraints) {
             CollisionConstraint collisionConstraint = (CollisionConstraint)constraint;
-            sceneDebuger.addBody(new VectorVis(collisionConstraint.getpA(), collisionConstraint.getpB()));
+            sceneDebuger.addPoint(new CanvasPointWithLabel(collisionConstraint.getpA(), Color.blue) );
+            sceneDebuger.addPoint(new CanvasPointWithLabel(collisionConstraint.getpB(), Color.green) );
         }
 
     }

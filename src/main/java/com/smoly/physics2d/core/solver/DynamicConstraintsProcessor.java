@@ -1,6 +1,6 @@
-package com.smoly.physics2d.core;
+package com.smoly.physics2d.core.solver;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
 
 import java.util.List;

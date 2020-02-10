@@ -1,6 +1,5 @@
-package com.smoly.physics2d.scenes.chain;
+package com.smoly.physics2d.core.geometry;
 
-import com.smoly.physics2d.core.Body;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.util.ArrayList;

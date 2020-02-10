@@ -1,6 +1,6 @@
 package com.smoly.physics2d.core.constraint;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import org.apache.commons.math3.linear.RealMatrix;
 
 public abstract class Constraint {

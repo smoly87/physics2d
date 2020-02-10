@@ -1,6 +1,6 @@
 package com.smoly.physics2d.core.collisions;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 
 public class BoundRect {
     protected double x;

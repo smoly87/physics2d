@@ -1,12 +1,9 @@
 package com.smoly.physics2d.core.solver;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
-import com.smoly.physics2d.core.Body;
-import com.smoly.physics2d.core.DynamicConstraintsProcessor;
-import com.smoly.physics2d.core.Force;
-import com.smoly.physics2d.core.MatrixUtils;
+import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.geometry.Force;
+import com.smoly.physics2d.core.utils.MatrixUtils;
 import com.smoly.physics2d.core.constraint.Constraint;
 import com.smoly.physics2d.core.constraint.ConstraintType;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;

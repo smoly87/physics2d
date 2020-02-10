@@ -1,9 +1,11 @@
-package com.smoly.physics2d.scenes.chain;
+package com.smoly.physics2d.core.utils;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 @Singleton
@@ -12,7 +14,13 @@ public class SceneDebuger {
         return bodiesList;
     }
 
-    private  List<Body> bodiesList;
+    private List<Body> bodiesList;
+
+    public List<CanvasPointWithLabel> getPointsList() {
+        return pointsList;
+    }
+
+    private  List<CanvasPointWithLabel> pointsList;
 
     @Inject
     public SceneDebuger() {
@@ -21,6 +29,7 @@ public class SceneDebuger {
 
     public void clearBodyList() {
         bodiesList = new ArrayList<>();
+        pointsList = new ArrayList<>();
     }
 
     public void addBody(Body body) {
@@ -29,5 +38,10 @@ public class SceneDebuger {
     public void addBody(List<Body> bodiesList) {
         this.bodiesList.addAll(bodiesList);
     }
+
+    public void addPoint(CanvasPointWithLabel canvasPointWithLabel) {
+        pointsList.add(canvasPointWithLabel);
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package com.smoly.physics2d.core.collisions;
 
-import com.smoly.physics2d.core.Body;
+import com.smoly.physics2d.core.geometry.Body;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 public class PenetrationInfo {

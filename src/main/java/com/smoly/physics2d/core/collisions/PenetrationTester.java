@@ -1,12 +1,12 @@
 package com.smoly.physics2d.core.collisions;
 
-import com.smoly.physics2d.core.Body;
-import com.smoly.physics2d.core.Edge;
+import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.geometry.Edge;
+import com.smoly.physics2d.core.utils.LineIntersectionUtil;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import static java.lang.Math.min;
-import static java.lang.Math.max;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PenetrationTester {
@@ -21,30 +21,16 @@ public class PenetrationTester {
         return vertsInside;
     }
 
-    protected Vector2D getClosestEdgePB(Vector2D v,Body bodyA, Body bodyB) {
+    public Vector2D getClosestEdgePB(Vector2D v,Body bodyA, Body bodyB) {
         for( Edge e : bodyB.getEdgesAbs()) {
-            double x1 = e.getV1().getX();
-            double x2 = e.getV2().getX();
-            double y1 = e.getV1().getY();
-            double y2 = e.getV2().getY();
-
-            double x3 = v.getX();
-            double x4 = bodyA.getCenter().getX();
-            double y3 = e.getV1().getY();
-            double y4 = bodyA.getCenter().getY();;
-
-            double p1 = (x2-x1);
-            double p2 = (x4-x3);
-            double q1 = (y2-y1);
-            double q2 = (y4-y3);
-            double xp = ((q2/p2) * x3 - (x1*q1)/p1 + y1 -y3) / (q2/p2 - q1/p1);
-            double yp = (xp - x1) * q1/p1 + y1;
-
-            if ((xp >= min(x3, x4) && xp <= max(x3, x4)) && (yp >= min(y3, y4) && yp <= max(y3, y4))) {
-                Vector2D p = new Vector2D(xp, yp);
+            Optional<Vector2D> intersectRes = LineIntersectionUtil
+                    .getLinesIntersections(e.getV1(), e.getV2(), bodyA.getCenter(), v);
+            if (!intersectRes.isPresent()) continue;
+            Vector2D p = intersectRes.get();
+            if (LineIntersectionUtil.vertexInBound(p, v, bodyA.getCenter())) {
                 Vector2D minusN = e.getN().scalarMultiply(-1);
-                double nProj = v.subtract(p).dotProduct(minusN);
-                return v.add(minusN.scalarMultiply(nProj)) ;
+                double nProj = (v.subtract(p)).dotProduct(minusN);
+                return v.subtract(minusN.scalarMultiply(nProj)) ;
             }
         }
         throw new IllegalStateException("Could not find the closest point in the intersection");
