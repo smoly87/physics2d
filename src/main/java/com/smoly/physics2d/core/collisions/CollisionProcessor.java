@@ -7,7 +7,6 @@ import com.smoly.physics2d.core.geometry.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
 import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
 import com.smoly.physics2d.core.utils.SceneDebuger;
-import com.smoly.physics2d.core.geometry.bodies.types.VectorVis;
 
 import java.awt.*;
 import java.util.*;
@@ -35,7 +34,7 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
             for (int j = i + 1 ; j < boundRectsList.size(); j++) {
                 BoundRect b1 = boundRectsList.get(i);
                 BoundRect b2 = boundRectsList.get(j);
-                if (b1.isIntersectsWith(b2)) {
+                if (b1.isIntersectsWith(b2) || b2.isIntersectsWith(b1)) {
                     collisionCandidateList.add(new CollisionCandidate(b1.getBody(), b2.getBody()));
                 }
             }
@@ -54,11 +53,26 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
 
     @Override
     public List<Constraint> generateDynamicConstraints(List<Body> bodiesList) {
-        List<Constraint> res = getCollisionCandidates(bodiesList).stream()
+        List<CollisionCandidate> collisionCandidates = getCollisionCandidates(bodiesList);
+        List<PenetrationInfo> penetrationInfoListAB = collisionCandidates.stream()
                 .map(collisionCandidate -> penetrationTester.getPenetrationsList(collisionCandidate.bodyA, collisionCandidate.bodyB))
                 .flatMap(Collection::stream)
-                .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
                 .collect(Collectors.toList());
+
+        List<PenetrationInfo> penetrationInfoListBA = collisionCandidates.stream()
+                .map(collisionCandidate -> penetrationTester.getPenetrationsList(collisionCandidate.bodyB, collisionCandidate.bodyA))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        List<PenetrationInfo> penetrationInfoList = new ArrayList<>();
+        penetrationInfoList.addAll(penetrationInfoListAB);
+        penetrationInfoList.addAll(penetrationInfoListBA);
+
+        List<Constraint> res =
+                penetrationInfoList
+                        .stream()
+                        .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
+                        .collect(Collectors.toList());
         debugConstraints(res);
         return res;
     }

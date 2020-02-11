@@ -63,8 +63,8 @@ public class ChainScene extends Scene {
         anchorVert.add(new Vector2D(0d, 0d));
         anchorVert.add(new Vector2D(0.5*l, 0f));
         anchor.setVertexes(anchorVert);
-        anchor.setM(0);
-        anchor.setI(0);
+        anchor.setInvM(0);
+        anchor.setInvI(0);
         return anchor;
     }
 }

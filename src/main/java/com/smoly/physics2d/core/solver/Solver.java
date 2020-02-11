@@ -57,7 +57,6 @@ public class Solver {
         }
     }
 
-
     private void addImpulseFromInteractionsConstraints(List<Constraint> bodyInteractionsList, double dt) {
         Map<Constraint, RealMatrix> JMap = new HashMap<>();
         Map<Constraint, Double> biasMap = new HashMap<>();
@@ -67,10 +66,10 @@ public class Solver {
         for (Constraint constraint : bodyInteractionsList) {
             Body A = constraint.getBodyA();
             Body B = constraint.getBodyB();
-            double mA = A.getM();
-            double mB = B.getM();
-            double iA = A.getI();
-            double iB = B.getI();
+            double mA = A.getInvM();
+            double mB = B.getInvM();
+            double iA = A.getInvI();
+            double iB = B.getInvI();
             RealMatrix J = constraint.getJ();
             double bias = solverConfig.beta() /  dt * constraint.getBias();
             RealMatrix MInvAB = new Array2DRowRealMatrix(MatrixUtils.diagMatrix(new double[]{mB, mB, iB, mA, mA, iA })); // United velocity vector of both bodies.

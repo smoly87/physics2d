@@ -13,7 +13,7 @@ public class BoundRect {
         return body;
     }
 
-    public BoundRect(Body body, double x1, double y, double width, double height) {
+    public BoundRect(Body body, double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;

@@ -20,8 +20,9 @@ public class LineIntersectionUtil {
      * @return
      */
     public static boolean vertexInBound(Vector2D v, Vector2D v1, Vector2D v2) {
-        return ((v.getX() >= min(v1.getX(), v2.getX()) && v.getX() <= max(v1.getX(), v2.getX()))
-                && (v.getY() >= min(v1.getY(), v2.getY()) && v.getY() <= max(v1.getY(), v2.getY()))
+        double D = 1e-2;
+        return ((v.getX() + D >= min(v1.getX(), v2.getX()) && v.getX() - D <= max(v1.getX(), v2.getX()))
+                && (v.getY()+ D >= min(v1.getY(), v2.getY()) && v.getY() - D <= max(v1.getY(), v2.getY()))
         );
     }
 
@@ -46,12 +47,16 @@ public class LineIntersectionUtil {
         double q1 = (y2-y1);
         double q2 = (y4-y3);
 
-        if (isCloseTo(p1, 0 ) && isCloseTo(p2, 0 )) {
-            return Optional.empty();
-        }
+
 
         if (isCloseTo(q1, 0 ) && isCloseTo(q2, 0 )) {
-            return Optional.empty();
+            Vector2D vec;
+            if (line1v2.subtract(line1v2).getNorm() < line2v2.subtract(line2v2).getNorm()) {
+                vec = line1v2.subtract(line1v2).scalarMultiply(0.5);
+            } else {
+                vec = line2v2.subtract(line2v2).scalarMultiply(0.5);
+            }
+            return Optional.of(vec);
         }
         double xp;
         double yp;
@@ -62,7 +67,7 @@ public class LineIntersectionUtil {
         }
         if (isCloseTo(q1, 0 )) {
             yp = y1;
-            xp = lineValueY(line2v1, line2v2, yp);
+            xp = lineValueX(line2v1, line2v2, yp);
             return Optional.of(new Vector2D(xp, yp));
         }
         if (isCloseTo(p2, 0 )) {
@@ -72,7 +77,7 @@ public class LineIntersectionUtil {
         }
         if (isCloseTo(q2, 0 )) {
             yp = y3;
-            xp = lineValueY(line1v1, line1v2, yp);
+            xp = lineValueX(line1v1, line1v2, yp);
             return Optional.of(new Vector2D(xp, yp));
         }
 

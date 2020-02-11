@@ -28,7 +28,7 @@ public class CollisionConstraint extends Constraint {
 
     @Override
     public RealMatrix getJ() {
-        Vector2D n = pB.subtract(pA).normalize();
+        Vector2D n = pB.subtract(pA).normalize().scalarMultiply(-1);
         Vector2D cA = bodyA.getCenter();
         Vector2D cB = bodyB.getCenter();
 
@@ -45,6 +45,8 @@ public class CollisionConstraint extends Constraint {
 
     @Override
     public double getBias() {
-        return 1;
+        Vector2D n = pB.subtract(pA).normalize().scalarMultiply(-1);
+        double C = pA.subtract(pB).dotProduct(n);
+        return ((C < 0) ? C : 0);
     }
 }

@@ -21,6 +21,7 @@ public class Scene {
     protected final SceneRender renderer;
     protected final Solver solver;
     protected final SceneDebuger sceneDebuger;
+
     public Scene(SceneRender renderer, Solver solver, SceneDebuger sceneDebuger) {
         bodiesList = new LinkedList<>();
         bodyInteractionsList = new LinkedList<>();
@@ -40,10 +41,10 @@ public class Scene {
         this.bodyInteractionsList.add(jointConstraint);
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
         init();
         double t = 0;
-        double maxT = 3;
+        double maxT = 10;
         double dt = 1d/100d;
         while(t < maxT) {
             solver.step(bodiesList, bodyInteractionsList,dt );
@@ -53,11 +54,10 @@ public class Scene {
             renderer.drawLabels(sceneDebuger.getPointsList());
             sceneDebuger.clearBodyList();
             t += dt;
-            break;
+           // break;
+            Thread.sleep(10);
         }
     }
-
-
 
     protected void step() {
 

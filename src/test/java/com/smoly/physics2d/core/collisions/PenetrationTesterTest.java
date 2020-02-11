@@ -1,6 +1,7 @@
 package com.smoly.physics2d.core.collisions;
 
 import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.utils.SceneDebuger;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import static org.junit.Assert.assertEquals;
@@ -14,7 +15,7 @@ public class PenetrationTesterTest {
     PenetrationTester penetrationTester;
     @Before
     public void setUp() throws Exception {
-        penetrationTester = new PenetrationTester();
+        penetrationTester = new PenetrationTester(new SceneDebuger());
     }
 
     @Test

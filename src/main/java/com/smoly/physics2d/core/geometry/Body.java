@@ -29,6 +29,10 @@ public class Body {
         this.subBodies = subBodies;
     }
 
+    public Body(List<Vector2D> vertexes) {
+        this.vertexes = vertexes;
+    }
+
     public Body() {
         forces = new ArrayList<>();
         v = new Vector3D(0d,0d,0d);
@@ -44,17 +48,18 @@ public class Body {
     protected List<Body> subBodies;
     protected Vector3D position; // coords of center and theta
     protected List<Vector2D> vertexes;
-    protected double I = 1; // moment of inertia
-    protected double m = 1; // mass
+    protected double invI = 1; // moment of inertia
+    protected double mInv = 1; // mass
     protected Vector3D v; // velocity x,y,w (linear and angular)
     protected List<Force> forces;
     protected List<Edge> edgesList;
+    protected  String title;
 
     public RealMatrix getInverseM() {
         return new Array2DRowRealMatrix(new double[][] {
-                {m,0,0},
-                {0,m,0},
-                {0,0,I}
+                {mInv,0,0},
+                {0, mInv,0},
+                {0,0, invI}
         });
     }
 
@@ -73,7 +78,7 @@ public class Body {
 
 
     public RealMatrix getTransformationMatrix() {
-        double theta = position.getZ() * Math.PI;
+        double theta = position.getZ() ;
         return new Array2DRowRealMatrix(new double[][]{
                 {cos(theta), -sin(theta)},
                 {sin(theta), cos(theta)},
@@ -113,20 +118,20 @@ public class Body {
                 .collect(Collectors.toList());
     }
 
-    public double getI() {
-        return I;
+    public double getInvI() {
+        return invI;
     }
 
-    public void setI(double i) {
-        I = i;
+    public void setInvI(double invI) {
+        this.invI = invI;
     }
 
-    public double getM() {
-        return m;
+    public double getInvM() {
+        return mInv;
     }
 
-    public void setM(double m) {
-        this.m = m;
+    public void setInvM(double mInv) {
+        this.mInv = mInv;
     }
 
     public Vector3D getV() {
@@ -143,5 +148,13 @@ public class Body {
 
     public void setForces(List<Force> forces) {
         this.forces = forces;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
