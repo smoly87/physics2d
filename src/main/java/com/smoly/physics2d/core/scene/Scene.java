@@ -44,23 +44,22 @@ public class Scene {
     public void start() throws InterruptedException {
         init();
         double t = 0;
-        double maxT = 15;
-        double dt = 1d/100d;
-        while(t < maxT) {
-            solver.step(bodiesList, bodyInteractionsList,dt );
-            renderer.clear();
-            renderer.renderBodies(bodiesList, Color.gray);
-            renderer.renderBodies(sceneDebuger.getBodiesList(), Color.red);
-            renderer.drawLabels(sceneDebuger.getPointsList());
-            sceneDebuger.clearBodyList();
+        double tMax = 15;
+        double dt = 1e-2;
+        while(t < tMax) {
+            step(t, dt);
             t += dt;
-           // break;
-            Thread.sleep(10);
         }
+        System.out.println("Animation has finished");
     }
 
-    protected void step() {
-
+    public void step(double t, double dt) {
+        solver.step(bodiesList, bodyInteractionsList,dt );
+        renderer.clear();
+        renderer.renderBodies(bodiesList, Color.gray);
+        renderer.renderBodies(sceneDebuger.getBodiesList(), Color.red);
+        renderer.drawLabels(sceneDebuger.getPointsList());
+        sceneDebuger.clearBodyList();
     }
 
     protected void init() {

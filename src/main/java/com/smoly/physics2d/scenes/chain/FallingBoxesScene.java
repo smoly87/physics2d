@@ -24,9 +24,9 @@ public class FallingBoxesScene extends Scene {
     @Override
     protected void init() {
        this.addBody(createBox(new Vector3D(0.0,1.5,0.25)));
-        this.addBody(createBox(new Vector3D(1.5,1.5,0.35)));
+       this.addBody(createBox(new Vector3D(1.5,1.5,0.35)));
 
-        this.addBody(createFloor());
+       this.addBody(createFloor());
     }
 
     protected Body createBox(Vector3D position) {

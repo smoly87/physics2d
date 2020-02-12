@@ -2,6 +2,7 @@ package com.smoly.physics2d.renderer;
 
 import com.google.inject.Inject;
 import com.smoly.physics2d.core.geometry.Body;
+import com.smoly.physics2d.core.scene.Scene;
 import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
 import com.smoly.physics2d.core.utils.MatrixUtils;
 import com.smoly.physics2d.core.scene.ScreenConfig;
@@ -23,6 +24,13 @@ public class Java2DRenderer extends JFrame implements SceneRender {
     protected long startT;
     protected Canvas canvas;
     protected final ScreenConfig config;
+
+    public void setG(Graphics g) {
+        this.g = g;
+    }
+
+    protected Graphics g;
+
     protected Integer[] worldCoordsToViewPort(Vector2D vec) {
       Vector3D viewPortCoord = new Vector3D(viewPortMatrix.multiply(vecToRealMatrix(createFrom2D(vec, 1d))).getColumn(0));
       return new Integer[]{(int)viewPortCoord.getX(), (int)viewPortCoord.getY()};
@@ -53,7 +61,6 @@ public class Java2DRenderer extends JFrame implements SceneRender {
     public void renderBodies(List<Body> bodiesList, Color color) {
         for(Body body : bodiesList) {
             Polygon polygon = createPolygonFromBody(body);
-            Graphics g = canvas.getGraphics();
             g.setColor(color);
             g.drawPolygon(polygon);
             //g.drawOval();
@@ -62,7 +69,6 @@ public class Java2DRenderer extends JFrame implements SceneRender {
 
     public void drawLabels(List<CanvasPointWithLabel> pointsList) {
         int d = 6;
-        Graphics g = canvas.getGraphics();
         for(CanvasPointWithLabel canvasPointWithLabel:pointsList) {
             Integer[] p = worldCoordsToViewPort(canvasPointWithLabel.getPosition());
             g.setColor(canvasPointWithLabel.getColor());
@@ -75,23 +81,36 @@ public class Java2DRenderer extends JFrame implements SceneRender {
     }
 
     public void setColor(Color color) {
-        canvas.getGraphics().setColor(Color.red);
+        g.setColor(Color.red);
     }
 
     @Override
     public void clear() {
-        canvas.getGraphics().clearRect(0, 0, config.screenWidth(), config.screenHeight());
+        //canvas.repaint();
+        g = canvas.getGraphics();
+        g.clearRect(0, 0, config.screenWidth(), config.screenHeight());
     }
 
     @Override
     public void paint(Graphics g) {
+
     }
 
     @Inject
-    public Java2DRenderer(ScreenConfig config, Canvas canvas) {
+    public Java2DRenderer(ScreenConfig config) {
         super("canvas");
         this.config = config;
         viewPortMatrix = calculateViewPortMatrix();
+        Java2DRenderer me = this;
+        Canvas canvas = new Canvas() {
+
+            // paint the canvas
+            public void paint(Graphics g)
+            {
+                me.setG(g);
+                System.out.println("++");
+            }
+        };
         canvas.setBackground(Color.black);
 
         add(canvas);
