@@ -41,7 +41,6 @@ public class PenetrationTester {
                     .getLinesIntersections(e.getV1(), e.getV2(), bodyA.getCenter(), v);
             if (!intersectRes.isPresent()) continue;
             Vector2D p = intersectRes.get();
-            System.out.println(p);
             sceneDebuger.addPoint(new CanvasPointWithLabel(p, Color.red) );
             sceneDebuger.addPoint(new CanvasPointWithLabel(e.getV1(), Color.green) );
             sceneDebuger.addPoint(new CanvasPointWithLabel(e.getV2(), Color.green) );

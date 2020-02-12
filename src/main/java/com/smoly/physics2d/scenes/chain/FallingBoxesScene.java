@@ -35,15 +35,14 @@ public class FallingBoxesScene extends Scene {
                 .addAllVertex(SimpleGeometryFactory.getQuadVertexes())
                 .addForce(new Vector2D(0,0), new Vector2D(0,-.1))
                 .build();
-
     }
 
     protected Body createFloor() {
         return   BodyBuidler.newBuilder()
                 .setPosition(new Vector3D(0.0,-0,0))
                 .addAllVertex(SimpleGeometryFactory.getRectangleVertexes(5,0.5))
-                .setInvMass(0)
-                .setInvI(0)
+                .setInvMass(0.5)
+                .setInvI(0.5)
                 .build();
 
     }

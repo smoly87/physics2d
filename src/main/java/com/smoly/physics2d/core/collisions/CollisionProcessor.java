@@ -1,12 +1,16 @@
 package com.smoly.physics2d.core.collisions;
 
 import com.google.inject.Inject;
+import com.smoly.physics2d.core.geometry.BodyBuidler;
+import com.smoly.physics2d.core.geometry.bodies.types.SimpleGeometryFactory;
 import com.smoly.physics2d.core.solver.DynamicConstraintsProcessor;
 import com.smoly.physics2d.core.constraint.CollisionConstraint;
 import com.smoly.physics2d.core.geometry.Body;
 import com.smoly.physics2d.core.constraint.Constraint;
 import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
 import com.smoly.physics2d.core.utils.SceneDebuger;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.awt.*;
 import java.util.*;
@@ -36,16 +40,25 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
                 BoundRect b2 = boundRectsList.get(j);
                 if (b1.isIntersectsWith(b2) || b2.isIntersectsWith(b1)) {
                     collisionCandidateList.add(new CollisionCandidate(b1.getBody(), b2.getBody()));
+                    drawBoundBox(b1);
+                    drawBoundBox(b2);
                 }
             }
         }
         return collisionCandidateList;
     }
 
+    private void drawBoundBox(BoundRect b) {
+        sceneDebuger.addBody(BodyBuidler.newBuilder()
+                .addAllVertex(SimpleGeometryFactory.getRectangleVertexes(b.width, b.height))
+                .setPosition(new Vector3D(b.x + b.width/2, b.y + b.height/2,0))
+                .build());
+    }
+
     protected BoundRect createBoundRect(Body body) {
         double Xmin = body.getVertexesAbs().stream().map(v -> v.getX()).min(Double::compareTo).get();
         double Ymin = body.getVertexesAbs().stream().map(v -> v.getY()).min(Double::compareTo).get();
-        double Xmax = body.getVertexesAbs().stream().map(v -> v.getY()).max(Double::compareTo).get();
+        double Xmax = body.getVertexesAbs().stream().map(v -> v.getX()).max(Double::compareTo).get();
         double Ymax = body.getVertexesAbs().stream().map(v -> v.getY()).max(Double::compareTo).get();
         return new BoundRect(body, Xmin, Ymin, Xmax - Xmin, Ymax - Ymin);
     }

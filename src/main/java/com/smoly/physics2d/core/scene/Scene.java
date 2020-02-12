@@ -44,7 +44,7 @@ public class Scene {
     public void start() throws InterruptedException {
         init();
         double t = 0;
-        double maxT = 10;
+        double maxT = 15;
         double dt = 1d/100d;
         while(t < maxT) {
             solver.step(bodiesList, bodyInteractionsList,dt );
