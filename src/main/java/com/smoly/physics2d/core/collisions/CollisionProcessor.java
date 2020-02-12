@@ -10,7 +10,6 @@ import com.smoly.physics2d.core.constraint.Constraint;
 import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
 import com.smoly.physics2d.core.utils.SceneDebuger;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.awt.*;
 import java.util.*;
@@ -62,7 +61,6 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
         double Ymax = body.getVertexesAbs().stream().map(v -> v.getY()).max(Double::compareTo).get();
         return new BoundRect(body, Xmin, Ymin, Xmax - Xmin, Ymax - Ymin);
     }
-
 
     @Override
     public List<Constraint> generateDynamicConstraints(List<Body> bodiesList) {

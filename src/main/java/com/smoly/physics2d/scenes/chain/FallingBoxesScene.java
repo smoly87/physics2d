@@ -23,15 +23,15 @@ public class FallingBoxesScene extends Scene {
 
     @Override
     protected void init() {
-        Body bodyA = createBox();
-        bodyA.setTitle("body");
-        this.addBody(bodyA);
+       this.addBody(createBox(new Vector3D(0.0,1.5,0.25)));
+        this.addBody(createBox(new Vector3D(1.5,1.5,0.35)));
+
         this.addBody(createFloor());
     }
 
-    protected Body createBox() {
+    protected Body createBox(Vector3D position) {
         return   BodyBuidler.newBuilder()
-                .setPosition(new Vector3D(0.0,1.5,0.25)) //0.8581499999999982
+                .setPosition(position) //0.8581499999999982
                 .addAllVertex(SimpleGeometryFactory.getQuadVertexes())
                 .addForce(new Vector2D(0,0), new Vector2D(0,-.1))
                 .build();
@@ -41,8 +41,8 @@ public class FallingBoxesScene extends Scene {
         return   BodyBuidler.newBuilder()
                 .setPosition(new Vector3D(0.0,-0,0))
                 .addAllVertex(SimpleGeometryFactory.getRectangleVertexes(5,0.5))
-                .setInvMass(0.5)
-                .setInvI(0.5)
+                .setInvMass(0)
+                .setInvI(0)
                 .build();
 
     }

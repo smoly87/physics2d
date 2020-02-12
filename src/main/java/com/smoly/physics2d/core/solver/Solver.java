@@ -72,7 +72,7 @@ public class Solver {
             double iB = B.getInvI();
             RealMatrix J = constraint.getJ();
             double bias = solverConfig.beta() /  dt * constraint.getBias();
-            RealMatrix MInvAB = new Array2DRowRealMatrix(MatrixUtils.diagMatrix(new double[]{mB, mB, iB, mA, mA, iA })); // United velocity vector of both bodies.
+            RealMatrix MInvAB = new Array2DRowRealMatrix(MatrixUtils.diagMatrix(new double[]{ mA, mA, iA, mB, mB, iB })); // United velocity vector of both bodies.
 
             MInvABMap.put(constraint, MInvAB);
             JMap.put(constraint, J);
@@ -88,7 +88,7 @@ public class Solver {
                 double bias = biasMap.get(constraint);
                 RealMatrix MInvAB = MInvABMap.get(constraint);
 
-                RealMatrix vAB = new Array2DRowRealMatrix(MatrixUtils.concat(B.getV().toArray(), A.getV().toArray())); // United velocity vector of both bodies.
+                RealMatrix vAB = new Array2DRowRealMatrix(MatrixUtils.concat(A.getV().toArray(), B.getV().toArray())); // United velocity vector of both bodies.
 
                 double labmdaNumerator = J.multiply(vAB).getEntry(0, 0) + bias;
                 double labmdaDenom = J.multiply(MInvAB.multiply(J.transpose())).getEntry(0, 0);
@@ -105,8 +105,8 @@ public class Solver {
                 }
                 vAB = vAB.add(MInvAB.multiply(J.transpose()).scalarMultiply(lambda));
                 double[] vABValues = vAB.getColumn(0);
-                B.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 0, 3)));
-                A.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 3, 3)));
+                A.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 0, 3)));
+                B.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 3, 3)));
             }
         }
 

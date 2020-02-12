@@ -83,12 +83,17 @@ public class Java2DRenderer extends JFrame implements SceneRender {
         canvas.getGraphics().clearRect(0, 0, config.screenWidth(), config.screenHeight());
     }
 
+    @Override
+    public void paint(Graphics g) {
+    }
+
     @Inject
     public Java2DRenderer(ScreenConfig config, Canvas canvas) {
         super("canvas");
         this.config = config;
         viewPortMatrix = calculateViewPortMatrix();
         canvas.setBackground(Color.black);
+
         add(canvas);
         setSize(config.screenWidth(), config.screenHeight());
         this.canvas = canvas;
