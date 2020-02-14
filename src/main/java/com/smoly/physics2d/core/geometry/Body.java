@@ -48,8 +48,8 @@ public class Body {
     protected List<Body> subBodies;
     protected Vector3D position; // coords of center and theta
     protected List<Vector2D> vertexes;
-    protected double invI = 1; // moment of inertia
-    protected double mInv = 1; // mass
+    protected double invI = 0.1; // moment of inertia
+    protected double mInv = 0.1; // mass
     protected Vector3D v; // velocity x,y,w (linear and angular)
     protected List<Force> forces;
     protected List<Edge> edgesList;

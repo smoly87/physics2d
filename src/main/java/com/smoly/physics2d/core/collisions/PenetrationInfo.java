@@ -8,6 +8,11 @@ public class PenetrationInfo {
     protected Vector2D pB;
     protected Body bodyA;
     protected Body bodyB;
+    protected Vector2D n;
+
+    public Vector2D getN() {
+        return n;
+    }
 
     public Vector2D getpA() {
         return pA;
@@ -25,10 +30,11 @@ public class PenetrationInfo {
         return bodyB;
     }
 
-    public PenetrationInfo(Body bodyA, Body bodyB, Vector2D pA, Vector2D pB) {
+    public PenetrationInfo(Body bodyA, Body bodyB, Vector2D pA, Vector2D pB, Vector2D n) {
         this.bodyA = bodyA;
         this.bodyB = bodyB;
         this.pA = pA;
         this.pB = pB;
+        this.n = n;
     }
 }

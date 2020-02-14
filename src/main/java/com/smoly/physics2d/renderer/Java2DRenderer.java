@@ -11,25 +11,27 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import static com.smoly.physics2d.core.utils.MatrixUtils.*;
-public class Java2DRenderer extends JFrame implements SceneRender {
+public class Java2DRenderer implements SceneRender {
 
     double xToViewPortCoof;
     double yToViewPortCoof;
     RealMatrix viewPortMatrix;
     protected long t;
     protected long startT;
-    protected Canvas canvas;
+    protected CustomCanvas customCanvas;
     protected final ScreenConfig config;
-
-    public void setG(Graphics g) {
-        this.g = g;
-    }
-
+    protected Scene scene;
     protected Graphics g;
+    protected Image image;
+
+    public Image getImage() {
+        return image;
+    }
 
     protected Integer[] worldCoordsToViewPort(Vector2D vec) {
       Vector3D viewPortCoord = new Vector3D(viewPortMatrix.multiply(vecToRealMatrix(createFrom2D(vec, 1d))).getColumn(0));
@@ -59,11 +61,10 @@ public class Java2DRenderer extends JFrame implements SceneRender {
     }
 
     public void renderBodies(List<Body> bodiesList, Color color) {
+        g.setColor(color);
         for(Body body : bodiesList) {
             Polygon polygon = createPolygonFromBody(body);
-            g.setColor(color);
             g.drawPolygon(polygon);
-            //g.drawOval();
         }
     }
 
@@ -80,42 +81,31 @@ public class Java2DRenderer extends JFrame implements SceneRender {
 
     }
 
-    public void setColor(Color color) {
-        g.setColor(Color.red);
-    }
-
-    @Override
     public void clear() {
-        //canvas.repaint();
-        g = canvas.getGraphics();
-        g.clearRect(0, 0, config.screenWidth(), config.screenHeight());
+       image = new BufferedImage(config.screenWidth(), config.screenHeight(),BufferedImage.TYPE_INT_ARGB);
+       g = image.getGraphics();
     }
 
-    @Override
-    public void paint(Graphics g) {
 
+    public void redraw() {
+        g.setColor(Color.green);
+        customCanvas.repaint();
     }
 
     @Inject
     public Java2DRenderer(ScreenConfig config) {
-        super("canvas");
+
         this.config = config;
         viewPortMatrix = calculateViewPortMatrix();
-        Java2DRenderer me = this;
-        Canvas canvas = new Canvas() {
 
-            // paint the canvas
-            public void paint(Graphics g)
-            {
-                me.setG(g);
-                System.out.println("++");
-            }
-        };
-        canvas.setBackground(Color.black);
-
-        add(canvas);
-        setSize(config.screenWidth(), config.screenHeight());
-        this.canvas = canvas;
-        show();
+        this.customCanvas =  new CustomCanvas(this);
+        JFrame f = new JFrame("Panel Example");
+        customCanvas.setBounds(0,0, config.screenWidth(),config.screenHeight());
+        customCanvas.setBackground(Color.black);
+        customCanvas.setVisible(true);
+        f.add(customCanvas);
+        f.setSize( config.screenWidth(), config.screenHeight());
+        f.setLayout(null);
+        f.setVisible(true);
     }
 }

@@ -7,6 +7,7 @@ import com.smoly.physics2d.core.utils.CanvasPointWithLabel;
 import com.smoly.physics2d.core.utils.LineIntersectionUtil;
 import com.smoly.physics2d.core.utils.SceneDebuger;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.util.Pair;
 
 import java.awt.*;
 import java.util.List;
@@ -26,13 +27,16 @@ public class PenetrationTester {
     public List<PenetrationInfo> getPenetrationsList(Body b1, Body b2) {
         List<PenetrationInfo> vertsInside = b1.getVertexesAbs().stream()
                 .filter(v -> isVertexInsideBody(v, b2))
-                .map(v -> new PenetrationInfo(b1 ,b2, v, getClosestEdgePB(v, b1, b2)))
+                .map(v -> {
+                    Pair<Vector2D, Vector2D> pbInfo = getClosestEdgePB(v, b1, b2);
+                    return new PenetrationInfo(b1 ,b2, v, pbInfo.getFirst(), pbInfo.getSecond());
+                })
                 .filter(penInfo -> penInfo.pB != null)
                 .collect(Collectors.toList());
         return vertsInside;
     }
 
-    public Vector2D getClosestEdgePB(Vector2D v,Body bodyA, Body bodyB) {
+    public Pair<Vector2D,Vector2D>  getClosestEdgePB(Vector2D v, Body bodyA, Body bodyB) {
         sceneDebuger.addPoint(new CanvasPointWithLabel(v, Color.ORANGE) );
         sceneDebuger.addPoint(new CanvasPointWithLabel(bodyA.getCenter(), Color.ORANGE) );
 
@@ -48,11 +52,11 @@ public class PenetrationTester {
             if (LineIntersectionUtil.vertexInBound(p, v, bodyA.getCenter())) {
                 Vector2D minusN = e.getN().scalarMultiply(-1);
                 double nProj = (v.subtract(p)).dotProduct(minusN);
-                return v.subtract(minusN.scalarMultiply(nProj)) ;
+                return new Pair(v.subtract(minusN.scalarMultiply(nProj)), e.getN()) ;
             }
         }
-        //throw new IllegalStateException("Could not find the closest point in the intersection");
-        return null;
+        throw new IllegalStateException("Could not find the closest point in the intersection");
+        //return null;
     }
 
     protected boolean isVertexInsideBody(Vector2D v,  Body b) {

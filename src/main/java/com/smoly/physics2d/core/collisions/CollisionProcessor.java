@@ -1,6 +1,7 @@
 package com.smoly.physics2d.core.collisions;
 
 import com.google.inject.Inject;
+import com.smoly.physics2d.core.constraint.FrictionConstraint;
 import com.smoly.physics2d.core.geometry.BodyBuidler;
 import com.smoly.physics2d.core.geometry.bodies.types.SimpleGeometryFactory;
 import com.smoly.physics2d.core.solver.DynamicConstraintsProcessor;
@@ -39,8 +40,8 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
                 BoundRect b2 = boundRectsList.get(j);
                 if (b1.isIntersectsWith(b2) || b2.isIntersectsWith(b1)) {
                     collisionCandidateList.add(new CollisionCandidate(b1.getBody(), b2.getBody()));
-                    drawBoundBox(b1);
-                    drawBoundBox(b2);
+                    /*drawBoundBox(b1);
+                    drawBoundBox(b2);*/
                 }
             }
         }
@@ -82,9 +83,16 @@ public class CollisionProcessor extends DynamicConstraintsProcessor {
         List<Constraint> res =
                 penetrationInfoList
                         .stream()
-                        .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB ))
+                        .map(penetrationInfo -> new CollisionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB, penetrationInfo.getN() ))
                         .collect(Collectors.toList());
-        debugConstraints(res);
+
+        List<Constraint> resFriction =
+                penetrationInfoList
+                        .stream()
+                        .map(penetrationInfo -> new FrictionConstraint(penetrationInfo.getBodyA(), penetrationInfo.getBodyB(), penetrationInfo.pA,penetrationInfo.pB, penetrationInfo.getN() ))
+                        .collect(Collectors.toList());
+        //debugConstraints(res);
+        //res.addAll(resFriction);
         return res;
     }
 

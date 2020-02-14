@@ -7,9 +7,9 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 import static com.smoly.physics2d.core.utils.MatrixUtils.crossProduct2d;
 
-public class CollisionConstraint extends Constraint {
+public class FrictionConstraint extends Constraint {
     private final Vector2D pA;
-    private final Vector2D n;
+    private final Vector2D t;
     public Vector2D getpA() {
         return pA;
     }
@@ -19,12 +19,12 @@ public class CollisionConstraint extends Constraint {
     }
 
     private final Vector2D pB;
-    public CollisionConstraint(Body bodyA, Body bodyB, Vector2D pA, Vector2D pB, Vector2D n) {
+    public FrictionConstraint(Body bodyA, Body bodyB, Vector2D pA, Vector2D pB, Vector2D n) {
         super(bodyA, bodyB);
-        this.setConstraintType(ConstraintType.INEQUALITY);
+        this.setConstraintType(ConstraintType.EQUALITY);
         this.pA = pA;
         this.pB = pB;
-        this.n = n;
+        this.t = new Vector2D(-n.getY(), n.getX());
     }
 
     @Override
@@ -33,19 +33,19 @@ public class CollisionConstraint extends Constraint {
         Vector2D cB = bodyB.getCenter();
 
         double[] J = new double[]{
-                n.getX(),
-                n.getY(),
-                crossProduct2d(pA.subtract(cA),  n),
-                -n.getX(),
-                -n.getY(),
-                -crossProduct2d(pB.subtract(cB),  n),
+                t.getX(),
+                t.getY(),
+                crossProduct2d(pA.subtract(cA), t),
+                -t.getX(),
+                -t.getY(),
+                -crossProduct2d(pB.subtract(cB), t),
         };
         return new Array2DRowRealMatrix(J).transpose();
     }
 
     @Override
     public double getBias() {
-        double C = pA.subtract(pB).dotProduct(n);
-        return ((C < 0) ? C : 0);
+
+        return ( 0);
     }
 }

@@ -79,13 +79,14 @@ public class Solver {
             biasMap.put(constraint, bias);
             accumulatedLambdaMap.put(constraint, 0d);
         }
+        double maxLambda = -11111;
         for (int i = 0; i < solverConfig.correctionStepsCount(); i++) {
             for (Constraint constraint : bodyInteractionsList) {
                 double lambdaAccumulated = accumulatedLambdaMap.get(constraint);
                 Body A = constraint.getBodyA();
                 Body B = constraint.getBodyB();
                 RealMatrix J = JMap.get(constraint);
-                double bias = biasMap.get(constraint);
+                double bias = solverConfig.beta() /  dt * constraint.getBias();
                 RealMatrix MInvAB = MInvABMap.get(constraint);
 
                 RealMatrix vAB = new Array2DRowRealMatrix(MatrixUtils.concat(A.getV().toArray(), B.getV().toArray())); // United velocity vector of both bodies.
@@ -103,12 +104,16 @@ public class Solver {
                     lambdaAccumulated += lambda;
                     accumulatedLambdaMap.put(constraint, lambdaAccumulated);
                 }
+                if(lambda > maxLambda) maxLambda = lambda;
+                //if (lambda > 0.1) lambda = 0.1;
                 vAB = vAB.add(MInvAB.multiply(J.transpose()).scalarMultiply(lambda));
                 double[] vABValues = vAB.getColumn(0);
+
                 A.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 0, 3)));
                 B.setV(new Vector3D(MatrixUtils.getPartial(vABValues, 3, 3)));
             }
         }
+        //if (maxLambda > 1e-2)System.out.println(maxLambda);
 
     }
 

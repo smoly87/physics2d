@@ -21,8 +21,8 @@ public class LineIntersectionUtil {
      */
     public static boolean vertexInBound(Vector2D v, Vector2D v1, Vector2D v2) {
         double D = 1e-2;
-        return ((v.getX() + D >= min(v1.getX(), v2.getX()) && v.getX() - D <= max(v1.getX(), v2.getX()))
-                && (v.getY()+ D >= min(v1.getY(), v2.getY()) && v.getY() - D <= max(v1.getY(), v2.getY()))
+        return ((v.getX()  >= min(v1.getX(), v2.getX()) && v.getX()  <= max(v1.getX(), v2.getX()))
+                && (v.getY() >= min(v1.getY(), v2.getY()) && v.getY() <= max(v1.getY(), v2.getY()))
         );
     }
 

@@ -6,6 +6,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.smoly.physics2d.core.scene.Scene;
 import com.smoly.physics2d.renderer.Java2DRenderer;
+import com.smoly.physics2d.renderer.SceneRender;
 import com.smoly.physics2d.scenes.chain.ChainScene;
 import com.smoly.physics2d.scenes.chain.FallingBoxesScene;
 import com.smoly.physics2d.scenes.chain.TestHelperScene;
@@ -17,7 +18,6 @@ class MainApp {
        // Scene scene = injector.getInstance(TestHelperScene.class);
        // Scene scene = injector.getInstance(ChainScene.class);
         Scene scene = injector.getInstance(FallingBoxesScene.class);
-
         scene.start();
     }
 }

@@ -18,16 +18,21 @@ public class Scene {
 
     private final  List<Body> bodiesList;
     private final List<Constraint> bodyInteractionsList;
-    protected final SceneRender renderer;
+
+    public void setRenderer(SceneRender renderer) {
+        this.renderer = renderer;
+    }
+
+    protected  SceneRender renderer;
     protected final Solver solver;
     protected final SceneDebuger sceneDebuger;
 
     public Scene(SceneRender renderer, Solver solver, SceneDebuger sceneDebuger) {
         bodiesList = new LinkedList<>();
         bodyInteractionsList = new LinkedList<>();
-        this.renderer = renderer;
         this.solver = solver;
         this.sceneDebuger = sceneDebuger;
+        this.renderer = renderer;
     }
 
     public void addBody(Body body) {
@@ -44,11 +49,13 @@ public class Scene {
     public void start() throws InterruptedException {
         init();
         double t = 0;
-        double tMax = 15;
+        double tMax = 1000;
         double dt = 1e-2;
         while(t < tMax) {
             step(t, dt);
             t += dt;
+            Thread.sleep(1);
+
         }
         System.out.println("Animation has finished");
     }
@@ -59,6 +66,8 @@ public class Scene {
         renderer.renderBodies(bodiesList, Color.gray);
         renderer.renderBodies(sceneDebuger.getBodiesList(), Color.red);
         renderer.drawLabels(sceneDebuger.getPointsList());
+        renderer.redraw();
+
         sceneDebuger.clearBodyList();
     }
 
